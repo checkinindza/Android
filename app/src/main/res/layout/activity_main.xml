@@ -7,9 +7,9 @@
     android:layout_height="match_parent">
 
     <ListView
-        android:id="@+id/availableBooks"
-        android:layout_width="331dp"
-        android:layout_height="828dp"
+        android:id="@+id/availableBooksList"
+        android:layout_width="414dp"
+        android:layout_height="892dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
