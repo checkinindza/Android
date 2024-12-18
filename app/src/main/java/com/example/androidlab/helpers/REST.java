@@ -10,25 +10,31 @@ import java.net.HttpURLConnection;
 import java.net.ProtocolException;
 import java.net.URL;
 
+import javax.net.ssl.HttpsURLConnection;
+
 public class REST {
 
     private static BufferedWriter bufferedWriter;
     private static OutputStream outputStream;
     private static BufferedReader bufferedReader;
     private static StringBuffer response;
-    private static HttpURLConnection httpURLConnection;
 
-    public static void setHttpConnectionProperties(String requestMethod) throws ProtocolException {
+    public static void setHttpConnectionProperties(String requestMethod, HttpURLConnection httpURLConnection) throws ProtocolException {
         httpURLConnection.setRequestMethod(requestMethod);
         httpURLConnection.setConnectTimeout(20000);
         httpURLConnection.setReadTimeout(20000);
         httpURLConnection.setRequestProperty("Content-Type", "application/json; charset=UTF-8");
         httpURLConnection.setRequestProperty("Accept", "*/*");
         httpURLConnection.setDoInput(true);
-        httpURLConnection.setDoOutput(true);
+        if (requestMethod.equals("GET")) {
+            httpURLConnection.setDoOutput(false);
+        } else {
+            httpURLConnection.setDoOutput(true);
+        }
+        System.out.println("Request method: " + httpURLConnection.getRequestMethod());
     }
 
-    public static int outputHttpResponseCode() throws IOException {
+    public static int outputHttpResponseCode(HttpURLConnection httpURLConnection) throws IOException {
         int code = httpURLConnection.getResponseCode();
         System.out.println("Response code: " + code);
         return code;
@@ -36,10 +42,8 @@ public class REST {
 
     public static String sendPost(String postUrl, String info) throws IOException {
         URL url = new URL(postUrl);
-        httpURLConnection = (HttpURLConnection) url.openConnection();
-
-        setHttpConnectionProperties("POST");
-
+        HttpURLConnection httpURLConnection = (HttpURLConnection) url.openConnection();
+        setHttpConnectionProperties("POST", httpURLConnection);
         outputStream = httpURLConnection.getOutputStream();
         bufferedWriter = new BufferedWriter(new OutputStreamWriter(outputStream, "UTF-8"));
         bufferedWriter.write(info);
@@ -47,7 +51,7 @@ public class REST {
         bufferedWriter.close();
         outputStream.close();
 
-        if (outputHttpResponseCode() == HttpURLConnection.HTTP_OK) {
+        if (outputHttpResponseCode(httpURLConnection) == HttpURLConnection.HTTP_OK) {
             bufferedReader = new BufferedReader(new InputStreamReader(httpURLConnection.getInputStream()));
             String line;
             response = new StringBuffer();
@@ -65,9 +69,9 @@ public class REST {
 
     public static String sendGet(String urlGet) throws IOException {
         URL url = new URL(urlGet);
-        httpURLConnection = (HttpURLConnection) url.openConnection();
-        setHttpConnectionProperties("GET");
-        if (outputHttpResponseCode() == HttpURLConnection.HTTP_OK) {
+        HttpURLConnection httpURLConnection = (HttpURLConnection) url.openConnection();
+        setHttpConnectionProperties("GET", httpURLConnection);
+        if (outputHttpResponseCode(httpURLConnection) == HttpURLConnection.HTTP_OK) {
             bufferedReader = new BufferedReader(new InputStreamReader(httpURLConnection.getInputStream()));
             String line;
             response = new StringBuffer();
@@ -87,11 +91,31 @@ public class REST {
         return "";
     }
 
+    public static String sendPut(String urlPut) throws IOException {
+        URL url = new URL(urlPut);
+        HttpURLConnection httpURLConnection = (HttpURLConnection) url.openConnection();
+        setHttpConnectionProperties("PUT", httpURLConnection);
+        if (outputHttpResponseCode(httpURLConnection) == HttpURLConnection.HTTP_OK) {
+            bufferedReader = new BufferedReader(new InputStreamReader(httpURLConnection.getInputStream()));
+            String line;
+            response = new StringBuffer();
+
+            while ((line = bufferedReader.readLine()) != null) {
+                response.append(line);
+                break;
+            }
+
+            bufferedReader.close();
+            return response.toString();
+        }
+        return "Error";
+    }
+
     public static String sendDelete(String urlDelete) throws IOException {
         URL url = new URL(urlDelete);
-        httpURLConnection = (HttpURLConnection) url.openConnection();
-        setHttpConnectionProperties("DELETE");
-        if (outputHttpResponseCode() == HttpURLConnection.HTTP_OK) {
+        HttpURLConnection httpURLConnection = (HttpURLConnection) url.openConnection();
+        setHttpConnectionProperties("DELETE", httpURLConnection);
+        if (outputHttpResponseCode(httpURLConnection) == HttpURLConnection.HTTP_OK) {
             bufferedReader = new BufferedReader(new InputStreamReader(httpURLConnection.getInputStream()));
             String line;
             response = new StringBuffer();

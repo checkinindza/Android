@@ -39,7 +39,7 @@ public enum MangaGenre {
     LOLICON,
     SHOTACON;
 
-    private final BooleanProperty on = new SimpleBooleanProperty(false);
+    /*private final BooleanProperty on = new SimpleBooleanProperty(false);
 
     @Override
     public BooleanProperty selectedProperty() {
@@ -48,7 +48,7 @@ public enum MangaGenre {
 
     public void setSelected(boolean selected) {
         this.on.set(selected);
-    }
+    }*/
 
     @Override
     public String toString() {

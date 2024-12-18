@@ -18,7 +18,7 @@ public enum BookGenre {
     HISTORICAL_FICTION,
     HORROR;
 
-    private final BooleanProperty on = new SimpleBooleanProperty(false);
+/*    private final BooleanProperty on = new SimpleBooleanProperty(false);
 
     @Override
     public BooleanProperty selectedProperty() {
@@ -27,7 +27,7 @@ public enum BookGenre {
 
     public void setSelected(boolean selected) {
         this.on.set(selected);
-    }
+    }*/
 
     @Override
     public String toString() {

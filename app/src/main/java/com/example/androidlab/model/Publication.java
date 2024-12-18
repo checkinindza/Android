@@ -15,23 +15,20 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 
-public abstract class Publication {
+public class Publication {
 
     protected int id;
     protected String title;
     protected Language language;
-    protected LocalDate publicationDate;
-    protected LocalDate requestDate;
+    protected String publicationDate;
     protected int pageCount;
     protected Client owner;
-    protected Client borrowerClientList;
     protected String publisher;
     protected String author;
     protected String summary;
     protected PublicationStatus publicationStatus;
-    protected String dtype;
 
-    public Publication(String title, Language language, LocalDate publicationDate, int pageCount, String publisher, String author, String summary, PublicationStatus publicationStatus) {
+/*    public Publication(String title, Language language, LocalDate publicationDate, int pageCount, String publisher, String author, String summary, PublicationStatus publicationStatus) {
         this.title = title;
         this.language = language;
         this.publicationDate = publicationDate;
@@ -40,9 +37,9 @@ public abstract class Publication {
         this.author = author;
         this.summary = summary;
         this.publicationStatus = publicationStatus;
-    }
+    }*/
 
-    public Publication(int pageCount, String title, LocalDate publicationDate, String publisher, String author, String summary, PublicationStatus publicationStatus, Language language, Client owner) {
+    public Publication(int pageCount, String title, String publicationDate, String publisher, String author, String summary, PublicationStatus publicationStatus, Language language, Client owner) {
         this.pageCount = pageCount;
         this.title = title;
         this.publicationDate = publicationDate;
@@ -57,6 +54,10 @@ public abstract class Publication {
     @Override
     public String toString() {
         return this.title;
+    }
+
+    public int getId() {
+        return this.id;
     }
 }
 
